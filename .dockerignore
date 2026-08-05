@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+tests/
+.specs/
+.git/
+.env
+.env.*
+*.log

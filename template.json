@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "api-nodejs-typescript",
+  "name": "API Node.js + TypeScript",
+  "description": "Fastify, PostgreSQL, Kysely, Vitest e Biome.",
+  "repository": "https://github.com/jptecno/template-api-nodejs-typescript",
+  "variables": [
+    {
+      "name": "projectName",
+      "prompt": "Nome do projeto",
+      "required": true,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    {
+      "name": "description",
+      "prompt": "Descrição do projeto",
+      "required": false,
+      "default": "API criada a partir do template da JP Tecno"
+    }
+  ],
+  "render": {
+    "include": [
+      "package.json",
+      "package-lock.json",
+      ".env.example",
+      "README.md"
+    ]
+  },
+  "postCreate": {
+    "packageManager": "npm",
+    "installCommand": "npm install",
+    "validateCommand": "npm run check"
+  }
+}
