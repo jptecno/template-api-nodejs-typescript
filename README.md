@@ -137,4 +137,30 @@ Todo pull request deve usar [`.github/pull_request_template.md`](./.github/pull_
 
 Para pull requests de `development` para `main`, preencha também homologação, impacto de produção e plano de rollback. Não remova seções aplicáveis; registre `Sem impacto` ou `Não se aplica` quando necessário.
 
+## Versionamento do template
+
+A versão do template é a tag Git consumida pelo `template-registry`; ela não é o campo `version` de `package.json`, que pertence a cada projeto gerado.
+
+| Alteração no template                                         | Próxima tag                            |
+| ------------------------------------------------------------- | -------------------------------------- |
+| Correção compatível no boilerplate                            | Patch, por exemplo `v0.1.0` → `v0.1.1` |
+| Nova capacidade compatível entregue a novos projetos          | Minor, por exemplo `v0.1.0` → `v0.2.0` |
+| Alteração incompatível de estrutura, configuração ou contrato | Major, por exemplo `v1.0.0` → `v2.0.0` |
+
+Mudanças exclusivamente documentais, como o modelo de pull request, não exigem uma nova tag nem atualização do registry.
+
+Para uma release que altere o template gerado:
+
+1. Valide a mudança em `development` com `npm run check` e o Docker build quando aplicável.
+2. Promova `development` para `main` por pull request.
+3. Crie e envie a tag a partir de `main`:
+
+   ```sh
+   git tag v0.2.0
+   git push origin v0.2.0
+   ```
+
+4. Atualize `template-registry/registry.json` em pull request separado, com `version` e `ref` apontando para a mesma nova tag.
+5. Valide que o `@jptecno/cli` cria e valida um projeto a partir da versão publicada.
+
 Consulte `AGENTS.md` para as convenções completas do repositório.

@@ -126,6 +126,12 @@ Use Conventional Commits em português brasileiro, com escopo quando ele tornar 
 
 Use `.github/pull_request_template.md` como modelo obrigatório para todos os pull requests. Pull requests para `development` devem explicar resumo, alteração de comportamento, camadas afetadas, impactos de configuração ou migração, segurança e comandos de validação executados. Para alterações HTTP, inclua exemplos de requisição e resposta. Pull requests de `development` para `main` devem preencher também a homologação realizada, impacto de produção e plano de rollback.
 
+## Versionamento do Template
+
+A versão do template é definida pela tag Git e pela entrada correspondente no `template-registry`; o campo `version` de `package.json` pertence ao projeto gerado e não deve ser usado para versionar o template.
+
+Use tags SemVer imutáveis. Correções compatíveis incrementam patch, novas capacidades compatíveis incrementam minor e alterações incompatíveis da estrutura, configuração ou contrato incrementam major. Para uma release, valide a mudança em `development`, promova para `main`, crie a tag a partir de `main` e atualize o registry em pull request separado para apontar `version` e `ref` para a nova tag. Mudanças exclusivamente documentais não exigem nova tag nem atualização do registry.
+
 ## Segurança e Configuração
 
 Não versione credenciais, tokens, dados de clientes ou arquivos `.env`. Leia segredos de variáveis de ambiente ou de um gerenciador aprovado, valide a configuração na inicialização e masque dados sensíveis nos logs.
