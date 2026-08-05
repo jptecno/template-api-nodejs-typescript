@@ -125,4 +125,16 @@ Fluxo de promoção:
 
 Não faça push direto em `development` ou `main`. Configure proteções de branch, revisões obrigatórias e checks obrigatórios no GitHub. Segredos e configurações de testes/produção devem ser configurados no provedor de deploy por ambiente, nunca em branches ou arquivos versionados.
 
+### Modelo de pull request
+
+Todo pull request deve usar [`.github/pull_request_template.md`](./.github/pull_request_template.md). O modelo exige:
+
+- resumo e lista objetiva das alterações;
+- comportamento, camadas afetadas e compatibilidade;
+- impactos de configuração, migração e segurança;
+- exemplos de requisição e resposta quando a interface HTTP mudar;
+- comandos e evidências de validação.
+
+Para pull requests de `development` para `main`, preencha também homologação, impacto de produção e plano de rollback. Não remova seções aplicáveis; registre `Sem impacto` ou `Não se aplica` quando necessário.
+
 Consulte `AGENTS.md` para as convenções completas do repositório.

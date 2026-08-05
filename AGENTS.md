@@ -124,7 +124,7 @@ Use Conventional Commits em português brasileiro, com escopo quando ele tornar 
 - `test(repository): cobre falha de conexão`
 - `chore(tooling): configura biome`
 
-Pull requests para `development` devem explicar a alteração de comportamento, as camadas afetadas, impactos de configuração ou migração, e os comandos de validação executados. Para alterações HTTP, inclua exemplos de requisição e resposta. Pull requests de `development` para `main` devem registrar a homologação realizada e o impacto de produção.
+Use `.github/pull_request_template.md` como modelo obrigatório para todos os pull requests. Pull requests para `development` devem explicar resumo, alteração de comportamento, camadas afetadas, impactos de configuração ou migração, segurança e comandos de validação executados. Para alterações HTTP, inclua exemplos de requisição e resposta. Pull requests de `development` para `main` devem preencher também a homologação realizada, impacto de produção e plano de rollback.
 
 ## Segurança e Configuração
 
