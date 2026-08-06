@@ -106,10 +106,11 @@ Fluxo obrigatório de promoção:
 5. Abra pull request de `development` para `main` somente após a homologação em `development`.
 6. Faça merge em `main` somente com CI verde e aprovação; essa branch representa produção.
 
-Mantenha as proteções de branch no provedor Git:
+O ruleset ativo `Proteção de branches permanentes` (ID `20485225`) protege `main` e `development` no GitHub:
 
-- proíba push direto em `development` e `main`;
-- exija CI e revisão para pull requests;
+- exige pull request com uma aprovação e resolução de todas as conversas;
+- proíbe push direto, exclusão de branch e force-push;
+- exige o status check `Validate template` da GitHub Actions;
 - associe o ambiente de testes a `development` e o ambiente de produção a `main`;
 - mantenha segredos e configurações de cada ambiente no provedor de deploy, nunca em branches ou arquivos versionados.
 

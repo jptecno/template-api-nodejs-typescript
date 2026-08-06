@@ -1,0 +1,6 @@
+/.github/workflows/** @marcelocmenezes
+/package.json @marcelocmenezes
+/package-lock.json @marcelocmenezes
+/Dockerfile @marcelocmenezes
+/template.json @marcelocmenezes
+/AGENTS.md @marcelocmenezes
