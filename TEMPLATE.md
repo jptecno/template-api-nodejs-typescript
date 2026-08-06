@@ -23,13 +23,21 @@ Não inclua scripts arbitrários para execução automática pelo CLI. Ações p
 - Toda mudança deve manter `npm run check` verde.
 - Toda configuração obrigatória de runtime deve ter exemplo seguro em `.env.example`.
 
-## Publicação
+## Versionamento e publicação
+
+A versão do template é a tag Git referenciada pelo `template-registry`. Não altere o campo `version` de `package.json` para versionar o template: ele pertence aos projetos gerados.
+
+- Patch: correções compatíveis no boilerplate.
+- Minor: novas capacidades compatíveis entregues a novos projetos.
+- Major: alterações incompatíveis na estrutura, configuração ou contrato gerado.
+
+Para publicar uma versão do template:
 
 1. Atualize `README.md`, `template.json` e `.env.example` quando a experiência de criação mudar.
-2. Execute `npm ci` e `npm run check`.
-3. Execute `docker build -t template-api-nodejs-typescript .`.
-4. Valide a criação por meio do `@jptecno/cli` em um diretório temporário e execute `npm run check` no projeto gerado.
-5. Publique uma tag SemVer, por exemplo `v1.0.0`.
-6. Atualize a referência dessa tag no catálogo mantido pelo CLI.
+2. Execute `npm ci`, `npm run check` e `docker build -t template-api-nodejs-typescript .`.
+3. Valide a criação por meio do `@jptecno/cli` em um diretório temporário e execute `npm run check` no projeto gerado.
+4. Promova a mudança validada de `development` para `main` por pull request.
+5. Crie uma tag SemVer imutável a partir de `main`, por exemplo `v0.2.0`, e envie-a ao remoto.
+6. Atualize o `template-registry` em pull request separado para apontar `version` e `ref` para a mesma tag.
 
-Use incremento de versão maior para alterações incompatíveis na estrutura ou configuração gerada; menor para novas capacidades compatíveis; correção para ajustes sem mudança de contrato.
+Mudanças exclusivamente documentais não exigem tag ou atualização do registry.
