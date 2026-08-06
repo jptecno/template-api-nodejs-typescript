@@ -110,7 +110,7 @@ O ruleset ativo `Proteção de branches permanentes` (ID `20485225`) protege `ma
 
 - exige pull request com uma aprovação e resolução de todas as conversas;
 - proíbe push direto, exclusão de branch e force-push;
-- não exige status checks até que uma execução real confirme o nome do check da CI;
+- exige o status check `Validate template` da GitHub Actions;
 - associe o ambiente de testes a `development` e o ambiente de produção a `main`;
 - mantenha segredos e configurações de cada ambiente no provedor de deploy, nunca em branches ou arquivos versionados.
 
