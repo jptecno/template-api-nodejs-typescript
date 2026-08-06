@@ -1,0 +1,25 @@
+[config]
+response_language = "pt-BR"
+repo_context_files = ["AGENTS.md"]
+repo_context_from_default_branch = true
+
+[pr_reviewer]
+require_tests_review = true
+require_security_review = true
+require_estimate_effort_to_review = false
+require_ticket_analysis_review = false
+persistent_comment = true
+num_max_findings = 5
+extra_instructions = """
+Revise apenas problemas concretos introduzidos pelo diff desta API Node.js/TypeScript.
+Priorize, nesta ordem:
+1. violações de DDD, Clean Architecture e Ports & Adapters, especialmente dependências de domain/application apontando para fora;
+2. contratos HTTP, validação nas bordas, status, corpos e tradução de erros em Fastify;
+3. invariantes e regras de negócio indevidamente movidas para controllers ou adapters;
+4. consultas Kysely sem tipagem, vazamento de tipos de persistência ou acesso PostgreSQL fora de adapters;
+5. migrações irreversíveis, incompatíveis ou sem isolamento de dados quando aplicável;
+6. configuração não validada na inicialização e divergências entre ambientes;
+7. exposição de secrets, credenciais, tokens, dados de clientes ou logs sensíveis;
+8. ausência de testes de regressão e de integração relevantes, inclusive Testcontainers e Undici quando aplicáveis.
+Não comente estilo ou formatação cobertos pelo Biome. Não sugira overengineering, abstrações, factories, genéricos, eventos ou camadas especulativas sem um defeito concreto no diff. Classifique heurísticas e incertezas como recomendações, nunca como falhas certas.
+"""

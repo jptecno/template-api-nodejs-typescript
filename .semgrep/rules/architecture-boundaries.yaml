@@ -1,0 +1,26 @@
+rules:
+  - id: domain-imports-infrastructure
+    message: O domínio não pode importar Node.js, HTTP, banco de dados ou camadas externas.
+    severity: ERROR
+    languages: [regex]
+    pattern-regex: ^import[^\n]*from\s+['"](?:node:[^'"]+|fastify|kysely|pg|\.\.?/[^'"]*(?:application|adapters|composition|contracts)/[^'"]*)['"]
+    paths:
+      include:
+        - /src/domain/**/*.ts
+        - /architecture-boundaries.ts
+    metadata:
+      confidence: HIGH
+      category: architecture
+
+  - id: application-imports-outward
+    message: A aplicação pode depender apenas do domínio e de suas próprias portas; não importe infraestrutura ou composição.
+    severity: ERROR
+    languages: [regex]
+    pattern-regex: ^import[^\n]*from\s+['"](?:node:[^'"]+|fastify|kysely|pg|\.\.?/[^'"]*(?:adapters|composition)/[^'"]*)['"]
+    paths:
+      include:
+        - /src/application/**/*.ts
+        - /architecture-boundaries.ts
+    metadata:
+      confidence: HIGH
+      category: architecture
