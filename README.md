@@ -123,7 +123,7 @@ Fluxo de promoção:
 5. Após a homologação, abra um pull request de `development` para `main`.
 6. Faça merge em `main` somente com revisão e CI verde; essa branch aciona o ambiente de produção.
 
-Não faça push direto em `development` ou `main`. Configure proteções de branch, revisões obrigatórias e checks obrigatórios no GitHub. Segredos e configurações de testes/produção devem ser configurados no provedor de deploy por ambiente, nunca em branches ou arquivos versionados.
+Não faça push direto em `development` ou `main`. O ruleset ativo `Proteção de branches permanentes` (ID `20485225`) exige pull request com uma aprovação, resolução das conversas e o status check `Validate template` da GitHub Actions, além de proibir exclusão e force-push nas duas branches. Segredos e configurações de testes/produção devem ser configurados no provedor de deploy por ambiente, nunca em branches ou arquivos versionados.
 
 ### Modelo de pull request
 
