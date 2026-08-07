@@ -9,9 +9,11 @@ O arquivo `template.json` é a fonte de verdade para:
 - identificador estável do template;
 - variáveis solicitadas ao desenvolvedor;
 - arquivos de texto nos quais os marcadores são renderizados;
-- comandos sugeridos após a criação.
+- toolchain declarativo de instalação e validação após a criação.
 
-Os marcadores seguem o formato `{{nomeDaVariavel}}`. Ao adicionar uma variável, declare-a em `template.json`, use-a somente nos arquivos listados em `render.include` e documente-a no `README.md`.
+`toolchain.steps` é um objeto com as chaves `install`, `formatCheck`, `lint`, `typecheck`, `test` e `build`; `dependsOn` referencia essas chaves. Cada step usa apenas comandos/argumentos literais aprovados: `npm install` e `npm run <script>`. Não inclua `npm ci` no manifesto: ele é reservado a CI e validações reprodutíveis.
+
+Os marcadores seguem o formato `{{ nomeDaVariavel }}` (sem os espaços na renderização). Ao adicionar uma variável, declare-a em `template.json`, use-a somente nos arquivos listados em `render.include` e documente-a no `README.md`.
 
 Não inclua scripts arbitrários para execução automática pelo CLI. Ações pós-criação devem permanecer declarativas, previsíveis e auditáveis.
 
