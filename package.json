@@ -21,7 +21,7 @@
     "@biomejs/biome": "^2.5.7",
     "@testcontainers/postgresql": "^12.1.0",
     "@tsconfig/node24": "^24.0.4",
-    "@types/node": "^24.1.0",
+    "@types/node": "^26.1.2",
     "@types/pg": "^8.20.4",
     "ajv": "^8.20.0",
     "danger": "13.0.10",
