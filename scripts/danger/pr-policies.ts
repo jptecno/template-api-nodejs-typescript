@@ -1,6 +1,7 @@
 export interface PullRequestFacts {
   title: string;
   body: string | null;
+  authorLogin: string;
   baseBranch: string;
   headBranch: string;
   files: string[];
@@ -60,7 +61,10 @@ export function evaluatePullRequest(facts: PullRequestFacts): PolicyResults {
     failures.push('Use um título no formato Conventional Commits.');
   }
 
-  if (meaningfulText(section(body, 'Resumo')).length === 0) {
+  if (
+    facts.authorLogin !== 'dependabot[bot]' &&
+    meaningfulText(section(body, 'Resumo')).length === 0
+  ) {
     failures.push('Preencha a seção Resumo com uma descrição objetiva.');
   }
 

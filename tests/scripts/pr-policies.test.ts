@@ -28,6 +28,7 @@ function facts(overrides: Partial<PullRequestFacts> = {}): PullRequestFacts {
   return {
     title: 'ci(review): adiciona políticas de pull request',
     body: completeBody,
+    authorLogin: 'octocat',
     baseBranch: 'development',
     headBranch: 'chore/automated-review',
     files: [
@@ -54,19 +55,28 @@ describe('evaluatePullRequest', () => {
     ).toContain('Use um título no formato Conventional Commits.');
   });
 
-  it('reprova resumo vazio ou mantido como placeholder', () => {
-    const body = `## Resumo
+  it('permite Dependabot sem resumo em pull request para development', () => {
+    expect(
+      evaluatePullRequest(facts({ authorLogin: 'dependabot[bot]', body: null }))
+        .failures,
+    ).not.toContain('Preencha a seção Resumo com uma descrição objetiva.');
+  });
 
-<!-- Explique o problema e a alteração em poucas linhas. -->`;
-    expect(evaluatePullRequest(facts({ body })).failures).toContain(
+  it('reprova resumo vazio em pull request humano', () => {
+    expect(evaluatePullRequest(facts({ body: null })).failures).toContain(
       'Preencha a seção Resumo com uma descrição objetiva.',
     );
   });
 
-  it('reprova pull request para main fora de development', () => {
+  it('reprova pull request do Dependabot para main fora de development', () => {
     expect(
       evaluatePullRequest(
-        facts({ baseBranch: 'main', headBranch: 'fix/urgente' }),
+        facts({
+          authorLogin: 'dependabot[bot]',
+          body: null,
+          baseBranch: 'main',
+          headBranch: 'dependabot/npm/typescript-6.0.4',
+        }),
       ).failures,
     ).toContain('Pull requests para main devem ter origem em development.');
   });
