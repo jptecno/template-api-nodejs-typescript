@@ -12,6 +12,7 @@ const files = [
 const results = evaluatePullRequest({
   title: pullRequest.title,
   body: pullRequest.body,
+  authorLogin: pullRequest.user.login,
   baseBranch: pullRequest.base.ref,
   headBranch: pullRequest.head.ref,
   files: [...new Set(files)],
