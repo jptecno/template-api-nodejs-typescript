@@ -27,7 +27,7 @@
     "danger": "13.0.10",
     "tsx": "^4.19.2",
     "typescript": "6.0.3",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@fastify/helmet": "^13.1.0",
