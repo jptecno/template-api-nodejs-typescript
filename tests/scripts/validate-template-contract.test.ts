@@ -52,6 +52,49 @@ describe('validateTemplateContract', () => {
     ).resolves.toBeUndefined();
   });
 
+  it('aceita contrato após renderizar todas as variáveis declaradas', async () => {
+    const directory = await createFixture();
+    const replacements = new Map([
+      ['{{projectName}}', 'registry-harness-api'],
+      ['{{description}}', 'API criada pelo registry integration harness'],
+    ]);
+
+    for (const relativePath of [
+      'package.json',
+      'package-lock.json',
+      '.env.example',
+      'README.md',
+    ]) {
+      const path = join(directory, relativePath);
+      let content = await readFile(path, 'utf8');
+      for (const [placeholder, value] of replacements) {
+        content = content.replaceAll(placeholder, value);
+      }
+      await writeFile(path, content);
+    }
+
+    await expect(validateTemplateContract(directory)).resolves.toBeUndefined();
+  });
+
+  it('rejeita variável sem placeholder enquanto a fonte ainda não foi totalmente renderizada', async () => {
+    const directory = await createFixture();
+    for (const relativePath of ['package.json', 'README.md']) {
+      const path = join(directory, relativePath);
+      const content = await readFile(path, 'utf8');
+      await writeFile(
+        path,
+        content.replaceAll(
+          '{{description}}',
+          'API criada pelo registry integration harness',
+        ),
+      );
+    }
+
+    await expect(validateTemplateContract(directory)).rejects.toThrow(
+      'Placeholder declarado sem uso em render.include: {{description}}',
+    );
+  });
+
   it('rejeita toolchain.steps como array', async () => {
     const directory = await createFixture();
     const manifest = await readJson(join(directory, 'template.json'));
