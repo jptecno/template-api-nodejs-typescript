@@ -126,6 +126,7 @@ async function validatePlaceholders(root, manifest) {
   const declared = new Set(manifest.variables.map((variable) => variable.name));
   const includedFiles = new Set(manifest.render.include);
   const found = new Map([...declared].map((name) => [name, new Set()]));
+  let hasSourcePlaceholders = false;
   const files = await listTemplateFiles(root);
 
   for (const relativePath of files) {
@@ -143,8 +144,11 @@ async function validatePlaceholders(root, manifest) {
         );
       }
       found.get(name).add(relativePath);
+      hasSourcePlaceholders = true;
     }
   }
+
+  if (!hasSourcePlaceholders) return;
 
   for (const [name, paths] of found) {
     if (paths.size === 0) {
