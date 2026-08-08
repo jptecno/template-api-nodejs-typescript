@@ -1,12 +1,14 @@
 FROM node:24-bookworm-slim AS build
 
 WORKDIR /app
+RUN chown node:node /app
+USER node
 
-COPY package.json package-lock.json ./
+COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci
 
-COPY tsconfig.json ./
-COPY src ./src
+COPY --chown=node:node tsconfig.json ./
+COPY --chown=node:node src ./src
 RUN npm run build
 
 FROM node:24-bookworm-slim AS production
@@ -14,13 +16,13 @@ FROM node:24-bookworm-slim AS production
 ENV NODE_ENV=production
 
 WORKDIR /app
+RUN chown node:node /app
+USER node
 
-COPY package.json package-lock.json ./
+COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build --chown=node:node /app/dist ./dist
-
-USER node
 
 EXPOSE 3000
 

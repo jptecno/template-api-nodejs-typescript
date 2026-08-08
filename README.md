@@ -42,15 +42,16 @@ Nunca versione o arquivo `.env` ou credenciais reais. Use `.env.example` somente
 
 ## Comandos
 
-| Comando             | Finalidade                            |
-| ------------------- | ------------------------------------- |
-| `npm run dev`       | Inicia a API com recarga automática.  |
-| `npm run build`     | Compila TypeScript em `dist/`.        |
-| `npm start`         | Executa a aplicação compilada.        |
-| `npm test`          | Executa os testes Vitest.             |
-| `npm run lint`      | Executa Biome (lint e formatação).    |
-| `npm run typecheck` | Verifica os tipos de código e testes. |
-| `npm run check`     | Executa lint, tipos, testes e build.  |
+| Comando                | Finalidade                                             |
+| ---------------------- | ------------------------------------------------------ |
+| `npm run dev`          | Inicia a API com recarga automática.                   |
+| `npm run build`        | Compila TypeScript em `dist/`.                         |
+| `npm start`            | Executa a aplicação compilada.                         |
+| `npm test`             | Executa os testes Vitest.                              |
+| `npm run format:check` | Verifica a formatação com Biome.                       |
+| `npm run lint`         | Executa o lint do Biome.                               |
+| `npm run typecheck`    | Verifica os tipos de código e testes.                  |
+| `npm run check`        | Valida contrato, formato, lint, tipos, testes e build. |
 
 ## Docker
 

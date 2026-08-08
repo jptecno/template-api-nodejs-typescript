@@ -3,7 +3,7 @@
   "id": "api-nodejs-typescript",
   "name": "API Node.js + TypeScript",
   "description": "Fastify, PostgreSQL, Kysely, Vitest e Biome.",
-  "repository": "https://github.com/jptecno/template-api-nodejs-typescript",
+  "repository": "jptecno/template-api-nodejs-typescript",
   "variables": [
     {
       "name": "projectName",
@@ -26,9 +26,55 @@
       "README.md"
     ]
   },
-  "postCreate": {
-    "packageManager": "npm",
-    "installCommand": "npm install",
-    "validateCommand": "npm run check"
+  "toolchain": {
+    "ecosystem": "node",
+    "requirements": [
+      {
+        "tool": "node",
+        "minimumVersion": "24.0.0"
+      },
+      {
+        "tool": "npm",
+        "minimumVersion": "11.0.0"
+      }
+    ],
+    "steps": {
+      "install": {
+        "command": "npm",
+        "args": ["install"],
+        "dependsOn": [],
+        "recommended": true
+      },
+      "formatCheck": {
+        "command": "npm",
+        "args": ["run", "format:check"],
+        "dependsOn": ["install"],
+        "recommended": true
+      },
+      "lint": {
+        "command": "npm",
+        "args": ["run", "lint"],
+        "dependsOn": ["formatCheck"],
+        "recommended": true
+      },
+      "typecheck": {
+        "command": "npm",
+        "args": ["run", "typecheck"],
+        "dependsOn": ["lint"],
+        "recommended": true
+      },
+      "test": {
+        "command": "npm",
+        "args": ["run", "test"],
+        "dependsOn": ["typecheck"],
+        "recommended": true
+      },
+      "build": {
+        "command": "npm",
+        "args": ["run", "build"],
+        "dependsOn": ["test"],
+        "recommended": true
+      }
+    }
   }
 }
