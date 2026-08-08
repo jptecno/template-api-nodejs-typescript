@@ -81,9 +81,15 @@ describe('validateTemplateContract', () => {
     for (const relativePath of ['package.json', 'README.md']) {
       const path = join(directory, relativePath);
       const content = await readFile(path, 'utf8');
+      const source = content
+        .replaceAll('registry-harness-api', '{{projectName}}')
+        .replaceAll(
+          'API criada pelo registry integration harness',
+          '{{description}}',
+        );
       await writeFile(
         path,
-        content.replaceAll(
+        source.replaceAll(
           '{{description}}',
           'API criada pelo registry integration harness',
         ),
