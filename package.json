@@ -15,10 +15,12 @@
     "test:watch": "vitest",
     "check": "npm run validate:template-contract && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",
     "validate:template-contract": "node scripts/validate-template-contract.mjs",
+    "verify:generated-project": "node scripts/verify-generated-project.mjs",
     "start": "node dist/main.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.7",
+    "@jptecno/cli": "0.6.0",
     "@testcontainers/postgresql": "^12.1.0",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^26.1.2",
