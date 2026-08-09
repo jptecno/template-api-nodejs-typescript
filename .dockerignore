@@ -3,7 +3,14 @@ dist/
 coverage/
 tests/
 .specs/
+.agents/
+.github/
+docs/
 .git/
 .env
 .env.*
+AGENTS.md
+BACKLOG.md
+CLAUDE.md
+lefthook.yml
 *.log

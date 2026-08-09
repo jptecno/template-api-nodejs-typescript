@@ -60,6 +60,12 @@ docker build -t {{projectName}} .
 docker run --rm -p 3000:3000 --env-file .env {{projectName}}
 ```
 
+A imagem usa `node:24-bookworm-slim` pinada no digest
+`sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03`,
+verificado com `docker buildx imagetools inspect node:24-bookworm-slim` em
+2026-08-09. O processo final usa o usuário não root `node`; atualize o digest
+somente em um pull request revisável.
+
 ## Estrutura
 
 ```text
