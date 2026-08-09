@@ -38,4 +38,16 @@ jobs:
         run: npm run check
 
       - name: Build Docker image
-        run: docker build -t template-api-nodejs-typescript .
+        run: docker build --no-cache -t template-api-nodejs-typescript .
+
+      - name: Smoke Docker image
+        run: |
+          docker run --detach --name template-api-smoke \
+            --publish 127.0.0.1:3000:3000 \
+            --env DATABASE_URL=postgresql://smoke:smoke@127.0.0.1:5432/smoke \
+            template-api-nodejs-typescript
+          trap 'docker rm --force template-api-smoke' EXIT
+          docker exec template-api-smoke sh -c \
+            'test "$(id -u)" -ne 0 && test ! -d /app/node_modules/vitest'
+          curl --fail --retry 10 --retry-all-errors --retry-delay 1 \
+            http://127.0.0.1:3000/health
