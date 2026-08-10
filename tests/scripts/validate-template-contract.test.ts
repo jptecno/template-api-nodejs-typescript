@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import {
   cp,
   mkdtemp,
@@ -18,6 +19,10 @@ import {
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const temporaryDirectories: string[] = [];
+
+const describeTemplateSource = existsSync(join(repositoryRoot, 'template.json'))
+  ? describe
+  : describe.skip;
 
 afterEach(async () => {
   await Promise.all(
@@ -48,7 +53,7 @@ async function writeJson(path: string, value: unknown): Promise<void> {
   await writeFile(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-describe('validateTemplateContract', () => {
+describeTemplateSource('validateTemplateContract', () => {
   it('aceita o contrato do template', async () => {
     await expect(
       validateTemplateContract(repositoryRoot),
