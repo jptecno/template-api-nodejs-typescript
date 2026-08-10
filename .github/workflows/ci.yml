@@ -14,13 +14,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
-    name: Validate template
+  structural:
+    name: Structural checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
@@ -37,17 +39,24 @@ jobs:
       - name: Lint, type-check, test and build
         run: npm run check
 
-      - name: Build Docker image
-        run: docker build --no-cache -t template-api-nodejs-typescript .
+  integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
-      - name: Smoke Docker image
-        run: |
-          docker run --detach --name template-api-smoke \
-            --publish 127.0.0.1:3000:3000 \
-            --env DATABASE_URL=postgresql://smoke:smoke@127.0.0.1:5432/smoke \
-            template-api-nodejs-typescript
-          trap 'docker rm --force template-api-smoke' EXIT
-          docker exec template-api-smoke sh -c \
-            'test "$(id -u)" -ne 0 && test ! -d /app/node_modules/vitest'
-          curl --fail --retry 10 --retry-all-errors --retry-delay 1 \
-            http://127.0.0.1:3000/health
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install producer dependencies
+        run: npm ci
+
+      - name: Verify generated project
+        run: node scripts/verify-generated-project.mjs

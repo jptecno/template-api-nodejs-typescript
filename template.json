@@ -65,7 +65,7 @@
       },
       "test": {
         "command": "npm",
-        "args": ["run", "test"],
+        "args": ["test"],
         "dependsOn": ["typecheck"],
         "recommended": true
       },
