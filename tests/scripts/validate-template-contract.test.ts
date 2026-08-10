@@ -11,7 +11,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { validateTemplateContract } from '../../scripts/validate-template-contract.mjs';
+import {
+  validateTemplateContract,
+  validateTemplateSource,
+} from '../../scripts/validate-template-contract.mjs';
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const temporaryDirectories: string[] = [];
@@ -74,6 +77,13 @@ describe('validateTemplateContract', () => {
     }
 
     await expect(validateTemplateContract(directory)).resolves.toBeUndefined();
+  });
+
+  it('ignora o contrato de fonte quando o projeto gerado não possui template.json', async () => {
+    const directory = await createFixture();
+    await rm(join(directory, 'template.json'));
+
+    await expect(validateTemplateSource(directory)).resolves.toBeUndefined();
   });
 
   it('rejeita variável sem placeholder enquanto a fonte ainda não foi totalmente renderizada', async () => {

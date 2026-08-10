@@ -55,6 +55,28 @@ export async function validateTemplateContract(rootDirectory) {
   validateToolchain(manifest, packageJson);
 }
 
+export async function validateTemplateSource(rootDirectory) {
+  const root = resolve(rootDirectory);
+
+  try {
+    await lstat(resolveSafePath(root, manifestRelativePath));
+  } catch (error) {
+    if (isMissingFile(error)) return;
+    throw error;
+  }
+
+  await validateTemplateContract(root);
+}
+
+function isMissingFile(error) {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    error.code === 'ENOENT'
+  );
+}
+
 async function readJson(root, relativePath) {
   const path = resolveSafePath(root, relativePath);
   const details = await lstat(path).catch(() => {
@@ -322,7 +344,7 @@ function isRecord(value) {
 const invokedPath = process.argv[1] && resolve(process.argv[1]);
 if (invokedPath === fileURLToPath(import.meta.url)) {
   const root = process.argv[2] ?? process.cwd();
-  validateTemplateContract(root).catch((error) => {
+  validateTemplateSource(root).catch((error) => {
     console.error(error.message);
     process.exitCode = 1;
   });
