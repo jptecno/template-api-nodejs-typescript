@@ -90,7 +90,7 @@ Os diretórios `domain/`, `application/` e `contracts/http/` são criados quando
 4. Conecte implementações concretas somente em `src/composition/`.
 5. Adicione testes observáveis em `tests/` e execute `npm run check` antes de enviar mudanças.
 
-A CI executa também `npm run verify:generated-project`. O harness usa a API programática publicada de `@jptecno/cli@0.6.0` para materializar o SHA em validação e então executa `npm ci`, `npm run check` e o smoke da imagem Docker no projeto resultante.
+A CI executa também `npm run verify:generated-project`. O harness usa a API programática publicada de `@jptecno/cli@0.6.2` para materializar o SHA em validação e então executa `npm ci`, `npm run check` e o smoke da imagem Docker no projeto resultante.
 
 ### Branches, worktrees e ambientes
 

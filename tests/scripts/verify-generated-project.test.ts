@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   checkGeneratedProject,
   materializeGeneratedProject,
+  smokeDockerImage,
   verifyGeneratedProject,
 } from '../../scripts/verify-generated-project.mjs';
 
@@ -57,6 +58,47 @@ describe('checkGeneratedProject', () => {
     expect(runCommand).toHaveBeenNthCalledWith(2, 'npm', ['run', 'check'], {
       cwd: '/tmp/generated-ci-api',
     });
+  });
+});
+
+describe('smokeDockerImage', () => {
+  it('constrói, executa e verifica a imagem gerada em loopback', async () => {
+    const runCommand = vi.fn().mockResolvedValue(undefined);
+    const fetchHealth = vi.fn().mockResolvedValue(undefined);
+
+    await smokeDockerImage({
+      containerName: 'generated-api-nodejs-typescript-smoke',
+      fetchHealth,
+      imageName: 'generated-api-nodejs-typescript',
+      projectDirectory: '/tmp/generated-ci-api',
+      runCommand,
+    });
+
+    expect(runCommand).toHaveBeenNthCalledWith(
+      1,
+      'docker',
+      ['build', '--no-cache', '--tag', 'generated-api-nodejs-typescript', '.'],
+      { cwd: '/tmp/generated-ci-api' },
+    );
+    expect(runCommand).toHaveBeenNthCalledWith(2, 'docker', [
+      'run',
+      '--detach',
+      '--name',
+      'generated-api-nodejs-typescript-smoke',
+      '--publish',
+      '127.0.0.1:3000:3000',
+      '--env',
+      'DATABASE_URL=postgresql://smoke:smoke@127.0.0.1:5432/smoke',
+      'generated-api-nodejs-typescript',
+    ]);
+    expect(runCommand).toHaveBeenNthCalledWith(3, 'docker', [
+      'exec',
+      'generated-api-nodejs-typescript-smoke',
+      'sh',
+      '-c',
+      'test "$(id -u)" -ne 0 && test ! -d /app/node_modules/vitest',
+    ]);
+    expect(fetchHealth).toHaveBeenCalledWith('http://127.0.0.1:3000/health');
   });
 });
 

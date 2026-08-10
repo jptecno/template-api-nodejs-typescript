@@ -212,6 +212,20 @@ describe('validateTemplateContract', () => {
     );
   });
 
+  it('rejeita o comando de teste incompatível com a allowlist da CLI', async () => {
+    const directory = await createFixture();
+    const manifest = await readJson(join(directory, 'template.json'));
+    const steps = (
+      manifest.toolchain as { steps: Record<string, Record<string, unknown>> }
+    ).steps;
+    steps.test.args = ['run', 'test'];
+    await writeJson(join(directory, 'template.json'), manifest);
+
+    await expect(validateTemplateContract(directory)).rejects.toThrow(
+      'Comando ou dependências inválidos no step: test',
+    );
+  });
+
   it('rejeita schema vendorizado adulterado', async () => {
     const directory = await createFixture();
     await writeFile(

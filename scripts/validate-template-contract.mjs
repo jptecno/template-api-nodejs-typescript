@@ -32,7 +32,7 @@ const expectedSteps = {
   },
   lint: { args: ['run', 'lint'], dependsOn: ['formatCheck'] },
   typecheck: { args: ['run', 'typecheck'], dependsOn: ['lint'] },
-  test: { args: ['run', 'test'], dependsOn: ['typecheck'] },
+  test: { args: ['test'], dependsOn: ['typecheck'] },
   build: { args: ['run', 'build'], dependsOn: ['test'] },
 };
 

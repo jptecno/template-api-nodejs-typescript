@@ -24,6 +24,18 @@ export function checkGeneratedProject(options: {
   runCommand: RunCommand;
 }): Promise<void>;
 
+export interface SmokeDockerImageOptions {
+  containerName: string;
+  fetchHealth: (url: string) => Promise<void>;
+  imageName: string;
+  projectDirectory: string;
+  runCommand: RunCommand;
+}
+
+export function smokeDockerImage(
+  options: SmokeDockerImageOptions,
+): Promise<void>;
+
 export interface VerifyGeneratedProjectOptions {
   containerName: string;
   createTemporaryDirectory: () => Promise<string>;
