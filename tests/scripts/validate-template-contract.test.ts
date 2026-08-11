@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import {
   cp,
   mkdtemp,
@@ -11,10 +12,17 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { validateTemplateContract } from '../../scripts/validate-template-contract.mjs';
+import {
+  validateTemplateContract,
+  validateTemplateSource,
+} from '../../scripts/validate-template-contract.mjs';
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const temporaryDirectories: string[] = [];
+
+const describeTemplateSource = existsSync(join(repositoryRoot, 'template.json'))
+  ? describe
+  : describe.skip;
 
 afterEach(async () => {
   await Promise.all(
@@ -45,7 +53,7 @@ async function writeJson(path: string, value: unknown): Promise<void> {
   await writeFile(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-describe('validateTemplateContract', () => {
+describeTemplateSource('validateTemplateContract', () => {
   it('aceita o contrato do template', async () => {
     await expect(
       validateTemplateContract(repositoryRoot),
@@ -74,6 +82,13 @@ describe('validateTemplateContract', () => {
     }
 
     await expect(validateTemplateContract(directory)).resolves.toBeUndefined();
+  });
+
+  it('ignora o contrato de fonte quando o projeto gerado não possui template.json', async () => {
+    const directory = await createFixture();
+    await rm(join(directory, 'template.json'));
+
+    await expect(validateTemplateSource(directory)).resolves.toBeUndefined();
   });
 
   it('rejeita variável sem placeholder enquanto a fonte ainda não foi totalmente renderizada', async () => {
@@ -209,6 +224,20 @@ describe('validateTemplateContract', () => {
     await writeJson(join(cycleDirectory, 'template.json'), cycleManifest);
     await expect(validateTemplateContract(cycleDirectory)).rejects.toThrow(
       'Comando ou dependências inválidos',
+    );
+  });
+
+  it('rejeita o comando de teste incompatível com a allowlist da CLI', async () => {
+    const directory = await createFixture();
+    const manifest = await readJson(join(directory, 'template.json'));
+    const steps = (
+      manifest.toolchain as { steps: Record<string, Record<string, unknown>> }
+    ).steps;
+    steps.test.args = ['run', 'test'];
+    await writeJson(join(directory, 'template.json'), manifest);
+
+    await expect(validateTemplateContract(directory)).rejects.toThrow(
+      'Comando ou dependências inválidos no step: test',
     );
   });
 

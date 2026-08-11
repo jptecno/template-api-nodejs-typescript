@@ -42,16 +42,17 @@ Nunca versione o arquivo `.env` ou credenciais reais. Use `.env.example` somente
 
 ## Comandos
 
-| Comando                | Finalidade                                             |
-| ---------------------- | ------------------------------------------------------ |
-| `npm run dev`          | Inicia a API com recarga automática.                   |
-| `npm run build`        | Compila TypeScript em `dist/`.                         |
-| `npm start`            | Executa a aplicação compilada.                         |
-| `npm test`             | Executa os testes Vitest.                              |
-| `npm run format:check` | Verifica a formatação com Biome.                       |
-| `npm run lint`         | Executa o lint do Biome.                               |
-| `npm run typecheck`    | Verifica os tipos de código e testes.                  |
-| `npm run check`        | Valida contrato, formato, lint, tipos, testes e build. |
+| Comando                            | Finalidade                                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run dev`                      | Inicia a API com recarga automática.                                                        |
+| `npm run build`                    | Compila TypeScript em `dist/`.                                                              |
+| `npm start`                        | Executa a aplicação compilada.                                                              |
+| `npm test`                         | Executa os testes Vitest.                                                                   |
+| `npm run format:check`             | Verifica a formatação com Biome.                                                            |
+| `npm run lint`                     | Executa o lint do Biome.                                                                    |
+| `npm run typecheck`                | Verifica os tipos de código e testes.                                                       |
+| `npm run check`                    | Valida contrato, formato, lint, tipos, testes e build.                                      |
+| `npm run verify:generated-project` | Materializa o commit atual pelo harness da CLI e valida o projeto gerado, incluindo Docker. |
 
 ## Docker
 
@@ -59,6 +60,12 @@ Nunca versione o arquivo `.env` ou credenciais reais. Use `.env.example` somente
 docker build -t {{projectName}} .
 docker run --rm -p 3000:3000 --env-file .env {{projectName}}
 ```
+
+A imagem usa `node:24-bookworm-slim` pinada no digest
+`sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03`,
+verificado com `docker buildx imagetools inspect node:24-bookworm-slim` em
+2026-08-09. O processo final usa o usuário não root `node`; atualize o digest
+somente em um pull request revisável.
 
 ## Estrutura
 
@@ -82,6 +89,8 @@ Os diretórios `domain/`, `application/` e `contracts/http/` são criados quando
 3. Implemente as portas em `src/adapters/`.
 4. Conecte implementações concretas somente em `src/composition/`.
 5. Adicione testes observáveis em `tests/` e execute `npm run check` antes de enviar mudanças.
+
+A CI executa também `npm run verify:generated-project`. O harness usa a API programática publicada de `@jptecno/cli@0.6.2` para materializar o SHA em validação e então executa `npm ci`, `npm run check` e o smoke da imagem Docker no projeto resultante.
 
 ### Branches, worktrees e ambientes
 
