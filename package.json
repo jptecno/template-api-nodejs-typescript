@@ -24,7 +24,7 @@
     "@testcontainers/postgresql": "^12.1.0",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^26.1.2",
-    "@types/pg": "^8.20.4",
+    "@types/pg": "^8.21.0",
     "ajv": "^8.20.0",
     "danger": "13.0.10",
     "tsx": "^4.19.2",
@@ -35,7 +35,7 @@
     "@fastify/helmet": "^13.1.0",
     "fastify": "^5.11.2",
     "kysely": "^0.29.4",
-    "pg": "^8.22.0",
+    "pg": "^8.23.0",
     "undici": "^8.10.0"
   }
 }
