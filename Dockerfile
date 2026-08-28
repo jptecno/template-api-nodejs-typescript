@@ -1,5 +1,5 @@
 # node:24-bookworm-slim verified from Docker Hub on 2026-08-09.
-FROM node:24-bookworm-slim@sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03 AS build
+FROM node:25-bookworm-slim@sha256:81db02c4b671288a03915da9534dbd54f96d0e7c24d80ccc54f5b36b2e684370 AS build
 
 WORKDIR /app
 RUN chown node:node /app
@@ -13,7 +13,7 @@ COPY --chown=node:node src ./src
 RUN npm run build
 
 # node:24-bookworm-slim verified from Docker Hub on 2026-08-09.
-FROM node:24-bookworm-slim@sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03 AS production
+FROM node:25-bookworm-slim@sha256:81db02c4b671288a03915da9534dbd54f96d0e7c24d80ccc54f5b36b2e684370 AS production
 
 ENV NODE_ENV=production
 
